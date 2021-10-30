@@ -5,14 +5,58 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://java.sun.com/jsp/jstl/core"
-      xmlns:p="http://primefaces.org/ui" >
+      xmlns:p="http://primefaces.org/ui" xmlns:H="http://java.sun.com/jsf/html">
 
 <f:view>
     <h:head>
-        <title>JSF Title</title>
+        <title>Главная</title>
+
+        <h:outputStylesheet library="css" name="style.css"/>
     </h:head>
 
+    <svg id="area" width="300px" height="300px" xmlns="http://www.w3.org/2000/svg" version="1.1"/>
+
     <h:body>
+        <p:outputLabel value="#{indexBean.value}"/>
+        <p>
+            X:
+            <h:commandButton styleClass="button-selected" id="x-5" value="-5" onclick="return setX(-5)"/>
+            <h:commandButton styleClass="button" id="x-4" value="-4" onclick="return setX(-4)"/>
+            <h:commandButton styleClass="button" id="x-3" value="-3" onclick="return setX(-3)"/>
+            <h:commandButton styleClass="button" id="x-2" value="-2" onclick="return setX(-2)"/>
+            <h:commandButton styleClass="button" id="x-1" value="-1" onclick="return setX(-1)"/>
+            <h:commandButton styleClass="button" id="x0" value="0" onclick="return setX(0)"/>
+            <h:commandButton styleClass="button" id="x1" value="1" onclick="return setX(1)"/>
+            <h:commandButton styleClass="button" id="x2" value="2" onclick="return setX(2)"/>
+            <h:commandButton styleClass="button" id="x3" value="3" onclick="return setX(3)"/>
+        </p>
+        <p>
+            Y:
+            <h:inputText value="10"
+                         converterMessage="Y must be number..."
+                         validatorMessage="Y must be number between -5 and 5 inclusive"
+                         required="true" requiredMessage="Y is required" maxlength="6">
+                <f:validateDoubleRange minimum="-3" maximum="3"/>
+                <!-- Хз что это за хрень -->
+                <f:ajax execute="@form" render="y-error"/>
+            </h:inputText>
+        </p>
+        <p>
+            R:
+            <p:commandLink id="r1" styleClass="link-selected" value="1" onclick="return setR(1)"/>
+            <p:commandLink id="r2" styleClass="link" value="2" onclick="return setR(2)"/>
+            <p:commandLink id="r3" styleClass="link" value="3" onclick="return setR(3)"/>
+            <p:commandLink id="r4" styleClass="link" value="4" onclick="return setR(4)"/>
+            <p:commandLink id="r5" styleClass="link" value="5" onclick="return setR(5)"/>
+        </p>
+
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+
         <h:panelGrid title="JSF panelGrid Title" border="10" columns="2">
 
             <h:outputLabel value="JSF standart label"/>
@@ -22,22 +66,50 @@
 
         <br/>
 
-        <!-- Без формы компоненты работать не будут -->
-        <h:form>
-            <p:panel header="PrimeFaces Components">
-                <p:outputLabel for="inputTextId" value="Введите значение: "/>
+        r:
+        <h:inputHidden id="r_hidden" value="#{indexBean.r}" required="true"
+                       requiredMessage="Выберите R"/>
 
-                <p:inputText id="inputTextId" title="Binding with ManagedBean"
-                             value="#{mainBean.inputText}">
-                </p:inputText>
 
-                <br/>
-
-                <p:commandButton value="GO to next page" action="nextPage"/>
-
-            </p:panel>
+        <!-- В эту форму будет записываться значение -->
+        Это спрятано V
+        <h:form id="main-form" style="/*display: none*/">
+            <h:inputText id="x" value="#{indexBean.x}"/>
+            <h:inputText id="y" value="#{indexBean.y}"/>
+            <h:inputText id="r" value="#{indexBean.r}"/>
+            <h:commandButton
+                    id="submit-button"
+                    type="submit"
+                    styleClass="hidden-submit-btn"
+                    action="#{indexBean.submitCoordinates}"/>
         </h:form>
 
+        <!-- Hidden storage (спрятанное хранилище) -->
+        <div>
+            <table id="result-table">
+                <tr class="table-header">
+                    <th class="coords-col">X</th>
+                    <th class="coords-col">Y</th>
+                    <th class="coords-col">R</th>
+                    <th class="time-col">Время запроса</th>
+                    <th class="hitres-col">Попадание</th>
+                </tr>
+                <ui:repeat value="#{indexBean.points}" var="point">
+                    <tr class="#{point.hit? 'hit-yes': 'hit-no'}">
+                        <td class="table-x-value">#{point.x}</td>
+                        <td class="table-y-value">#{point.y}</td>
+                        <td class="table-r-value">#{point.r}</td>
+                        <td>point.currentTime</td>
+                        <td class="table-hit-value">#{(point.hit ? "Да" : "Нет")}</td>
+                    </tr>
+                </ui:repeat>
+            </table>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" type="text/javascript"></script>
+        <script src="https://d3js.org/d3.v7.min.js" type="text/javascript"></script>
+        <h:outputScript library="js" name="graph.js"/>
+        <h:outputScript library="js" name="script.js" />
     </h:body>
 </f:view>
 
