@@ -17,14 +17,13 @@ import java.util.List;
 @ApplicationScoped - бин сохраняет данные в контексте всего приложения, все видят одни и те же данные
  */
 public class IndexBean implements Serializable {
-    protected String value = "тута значение";
     private List<HitResultModel> points = new ArrayList<HitResultModel>();
 
-    protected float x, y, r;
+    protected float x = -5, y = -3, r = 1;
 
     public IndexBean(){
-        points.add(new HitResultModel(1, 2, 3, true));
-        points.add(new HitResultModel(0, 1, 1, false));
+        // points.add(new HitResultModel(1, 2, 3, true));
+        // points.add(new HitResultModel(0, 1, 1, false));
     }
 
     public float getX(){
@@ -59,20 +58,6 @@ public class IndexBean implements Serializable {
         this.points = points;
     }
 
-
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public void checkHit(Long val){
-        setValue("checkHit " + val);
-        System.out.println(getValue());
-    }
 
     public void submitCoordinates(){
         System.out.println(String.format("x=%f, y=%f, r=%f", x, y, r));

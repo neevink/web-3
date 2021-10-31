@@ -1,10 +1,11 @@
 const minX = -5, maxX = 3;
 const minY = -3, maxY = 3;
 const minR = 1, maxR = 5;
-var x = 0, y = 0, r = 0;
-$('#x').val(minX);
-$('#r').val(minR)
+var x = 0, y = 0, r = 0
 
+document.getElementById('main-form:x').value = minX;
+document.getElementById('main-form:r').value = minR;
+/*
 $(document).ready(function () {
     while (graph === null){
 
@@ -16,29 +17,34 @@ $(document).ready(function () {
         .attr('fill', 'red')
         .attr('stroke', 'red');
 });
+ */
 
 function setX(newX){
-    $('#x').val(newX);
+    document.getElementById('main-form:x').value = newX;
 
     for(let i = minX; i <= maxX; i++){
-        $('#x' + i).removeClass('button-selected');
-        $('#x' + i).addClass('button');
+        let btn = document.getElementById('main-form:x' + i)
+        btn.classList.remove('button-selected');
+        btn.classList.add('button');
     }
 
-    $('#x' + newX).removeClass('button');
-    $('#x' + newX).addClass('button-selected');
+    let btn = document.getElementById('main-form:x' + newX)
+    btn.classList.remove('button');
+    btn.classList.add('button-selected');
 }
 
 function setR(newR){
-    $('#r').val(newR);
+    document.getElementById('main-form:r').value = newR;
 
     for(let i = minR; i <= maxR; i++){
-        $('#r' + i).removeClass('link-selected');
-        $('#r' + i).addClass('link');
+        let btn = document.getElementById('main-form:r' + i);
+        btn.classList.remove('link-selected');
+        btn.classList.add('link');
     }
 
-    $('#r' + newR).removeClass('link');
-    $('#r' + newR).addClass('link-selected');
+    let btn = document.getElementById('main-form:r' + newR);
+    btn.classList.remove('link');
+    btn.classList.add('link-selected');
 }
 
 function isNumeric(val) {
@@ -104,66 +110,6 @@ function validateForm(){
 
 function handleSendButtonClick(event){
     if(validateForm()){
-        addNewPoint(x, y, r);
+        addPoint(x, y, r);
     }
-}
-
-document.getElementById("area").onmousedown = function(event){
-    /* При нажатии по области мы не будем валидировать выбнаны ли какие-то поля, кроме R */
-    const areaSize = 300, radius = 110;
-    const selectedRadius = parseFloat($('#r').val());
-
-    if(!validateR(selectedRadius)){
-        alert('Не выбрано значение R!');
-    }
-
-    let rowX = ((event.offsetX - areaSize/2) / radius * selectedRadius).toFixed(3);
-    let rowY = ((areaSize/2 - event.offsetY) / radius * selectedRadius).toFixed(3);
-
-    //alert(`${rowX} ${rowY}`);
-    addNewPoint(rowX, rowY, selectedRadius);
-}
-
-function addNewPoint(x, y, r){
-    let request = $.ajax({
-        type: 'GET',
-        url: 'controller',
-        data: {
-            'x': x,
-            'y': y,
-            'r': r
-        }
-        })
-        .done((data) => {
-            if(data.errorMessage === undefined){
-                // Добавляем точку
-                const color = data.hit ? "#32CD32" : "#DC143C";
-
-                const constantRadius = 110;
-                const xVal = 150 + data.x / data.r * constantRadius;
-                const yVal = 150 - data.y / data.r * constantRadius;
-
-                const svgns = 'http://www.w3.org/2000/svg';
-                let newPoint = document.createElementNS(svgns, 'circle');
-                newPoint.setAttributeNS(null, 'cx', xVal);
-                newPoint.setAttributeNS(null, 'cy', yVal);
-                newPoint.setAttributeNS(null, 'r','4');
-                newPoint.setAttributeNS(null, 'fill', color);
-
-                document.getElementById('main-area').appendChild(newPoint);
-
-                // Добавляем строчку в таблицу
-                let row = document.getElementById('results-table').insertRow(1);
-                row.insertCell(0).innerHTML = `${data.hit ? '✅' : '❌'}`
-                row.insertCell(0).innerHTML = `${data.r}`
-                row.insertCell(0).innerHTML = `${data.y}`
-                row.insertCell(0).innerHTML = `${data.x}`
-            }
-            else{
-                alert(data.errorMessage);
-            }
-        })
-        .fail(() => {
-            alert('Не удалось подключиться к серверу!');
-        });
 }

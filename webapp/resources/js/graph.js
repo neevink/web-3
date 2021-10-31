@@ -6,7 +6,9 @@ const W2 = W / 2, H2 = H / 2;
 const R = 60;
 const TEXT_OFFSET = 6;
 const TEXT_X = W2 + TEXT_OFFSET, TEXT_Y = H2 - TEXT_OFFSET;
+
 const OPACITY = 1, FILL = '#3398fd', COLOR = '#000000', STROKE = '';
+const GREEN = "#32CD32", RED = "#DC143C";
 
 // Оси и отметки
 let lines = [[0, H2, W, H2], [W2, 0, W2, H]];
@@ -21,7 +23,7 @@ for (let n = 1; n <= 2; n++) {
 // Надписи
 let texts = [
     [265, TEXT_Y, 'R'], [200, TEXT_Y, 'R/2'], [75, TEXT_Y, '-R/2'], [20, TEXT_Y, '-R'],
-    [TEXT_X, 35, 'R'], [TEXT_X, 95, 'R/2'], [TEXT_X, 215, '-R/2'], [TEXT_X, 275, '-R'],
+    [TEXT_X, 35, 'R'], [TEXT_X, 95, 'R/2'], [TEXT_X, 215, '-R/2'], [TEXT_X, 275, '-R']
 ];
 
 // Стрелки на координатных осях
@@ -42,6 +44,7 @@ let circle = `M${W2},${H2} ${W2 + 2*R},${H2} A${2*R} ${2*R} 0 0 1 ${W2} ${H2 + 2
 $(document).ready(function () {
     graph = d3.select('svg');
     graphElem = document.querySelector('svg');
+    //console.log(graphElem);
 
     // Белый фон
     graph.append('rect')
@@ -97,41 +100,27 @@ $(document).ready(function () {
     });
 
     redrawPoints();
-    // TODO Вернуть
-    redrawGraph();
 
-    graphElem.addEventListener("click", (event) => {
-        const r = document.getElementById('r_hidden').value;
+    graphElem.addEventListener('click', (event) => {
+        const r = document.getElementById('main-form:r-hidden');
+        console.log(r === null);
         if (r != null) {
+            console.log(r);
             let pos = getMousePosition(event);
-            let areaPos = {...pos};
-            toAreaCoords(areaPos, r);
+            let xVal = Math.round((pos.x - W2) / (2*R) * r.value * 100) / 100;
+            let yVal = Math.round((pos.y - H2) / (2*R) * r.value * 100) / 100;
+            console.log(pos);
+            console.log(xVal);
+            console.log(yVal);
 
-            document.getElementById('main-form:x').value = normalize(areaPos.x);
-            document.getElementById('main-form:x').value = normalize(areaPos.y);
+            document.getElementById('main-form:x').value = yVal;
+            document.getElementById('main-form:y').value = xVal;
 
             let btn = document.getElementById('main-form:submit-button');
             btn.click();
         }
     });
 });
-
-
-function redrawGraph() {
-    let rVal = document.getElementById('r_hidden').value;
-    if (rVal) {
-        let _R = (rVal).toString();
-        let _R2 = (rVal / 2).toString();
-        let _texts = [
-            [265, TEXT_Y, _R], [200, TEXT_Y, _R2], [75, TEXT_Y, '-' + _R2], [20, TEXT_Y, '-' + _R], [290, TEXT_Y - 2, 'x'],
-            [TEXT_X, 35, _R], [TEXT_X, 95, _R2], [TEXT_X, 215, '-' + _R2], [TEXT_X, 275, '-' + _R], [TEXT_X + 2, 10, 'y']
-        ];
-
-        document.querySelectorAll('text').forEach((node, i) => {
-            node.innerHTML = _texts[i][2];
-        })
-    }
-}
 
 function getMousePosition(event) {
     const rect = graphElem.getBoundingClientRect();
@@ -141,55 +130,34 @@ function getMousePosition(event) {
     };
 }
 
-function toAreaCoords(pos, r) {
-    pos.x = pos.x - 150;
-    pos.y = 150 - pos.y;
 
-    const k = r / 120;
-    pos.x *= k;
-    pos.y *= k;
+function addPoint(x, y, r, isHit) {
+    graphElem.insertAdjacentHTML('beforeend', getCircleSvg(x, y, r, isHit));
 }
 
-function fromAreaCoords(pos, r) {
-    const k = r / 120;
-    pos.x /= k
-    pos.y /= k;
-
-    pos.y = 150 - pos.y;
-    pos.x = pos.x + 150;
-}
-
-function normalize(num) {
-    return Math.round(num * 10) / 10;
-}
-
-function addPointer(x, y, r, isHit) {
-    let pos = {x: x, y: y};
-    fromAreaCoords(pos, r);
-    graphElem.insertAdjacentHTML('beforeend', getCircleSvg(pos.x, pos.y, isHit));
-}
-
-function getCircleSvg(x, y, isHit) {
-    return `<circle r="5" cx="${x}" cy="${y}" fill-opacity="0.7" fill="${isHit ? 'green' : 'red'}"></circle>`
+function getCircleSvg(x, y, r, isHit) {
+    let graphX = H2 + x / r * 2*R;
+    let graphY = W2 - y / r * 2*R;
+    let col = isHit ? GREEN : RED;
+    return `<circle r="5" cx="${graphX}" cy="${graphY}" fill-opacity="1" fill="${col}"></circle>`
 }
 
 function redrawPoints() {
     clearPoints();
     // console.log("REDRAW");
-    const xTableValues = document.getElementsByClassName("table-x-value");
-    const yTableValues = document.getElementsByClassName("table-y-value");
-    const rTableValues = document.getElementsByClassName("table-r-value");
-    const hitTableValues = document.getElementsByClassName("table-hit-value");
-    const rHidden = document.getElementById('r_hidden');
+    const xTableValues = document.getElementsByClassName('table-x-value');
+    const yTableValues = document.getElementsByClassName('table-y-value');
+    const rTableValues = document.getElementsByClassName('table-r-value');
+    const hitTableValues = document.getElementsByClassName('table-hit-value');
+    const rHidden = document.getElementById('main-form:r-hidden');
+
 
     for (let i = 0; i < xTableValues.length; i++) {
-        let x = parseFloat(xTableValues[i].textContent),
-            y = parseFloat(yTableValues[i].textContent),
-            r = parseFloat(rTableValues[i].textContent),
-            hit = hitTableValues[i].textContent === 'Да';
-        if (r === parseFloat(rHidden.value)) {
-            addPointer(x, y, r, hit);
-        }
+        let x = parseFloat(xTableValues[i].innerText),
+            y = parseFloat(yTableValues[i].innerText),
+            r = parseFloat(rTableValues[i].innerText),
+            hit = hitTableValues[i].innerText === '✅';
+        addPoint(x, y, r, hit);
     }
 }
 

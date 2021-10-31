@@ -10,78 +10,62 @@
 <f:view>
     <h:head>
         <title>Главная</title>
-
         <h:outputStylesheet library="css" name="style.css"/>
     </h:head>
 
     <svg id="area" width="300px" height="300px" xmlns="http://www.w3.org/2000/svg" version="1.1"/>
 
     <h:body>
-        <p:outputLabel value="#{indexBean.value}"/>
-        <p>
-            X:
-            <h:commandButton styleClass="button-selected" id="x-5" value="-5" onclick="return setX(-5)"/>
-            <h:commandButton styleClass="button" id="x-4" value="-4" onclick="return setX(-4)"/>
-            <h:commandButton styleClass="button" id="x-3" value="-3" onclick="return setX(-3)"/>
-            <h:commandButton styleClass="button" id="x-2" value="-2" onclick="return setX(-2)"/>
-            <h:commandButton styleClass="button" id="x-1" value="-1" onclick="return setX(-1)"/>
-            <h:commandButton styleClass="button" id="x0" value="0" onclick="return setX(0)"/>
-            <h:commandButton styleClass="button" id="x1" value="1" onclick="return setX(1)"/>
-            <h:commandButton styleClass="button" id="x2" value="2" onclick="return setX(2)"/>
-            <h:commandButton styleClass="button" id="x3" value="3" onclick="return setX(3)"/>
-        </p>
-        <p>
-            Y:
-            <h:inputText value="10"
-                         converterMessage="Y must be number..."
-                         validatorMessage="Y must be number between -5 and 5 inclusive"
-                         required="true" requiredMessage="Y is required" maxlength="6">
-                <f:validateDoubleRange minimum="-3" maximum="3"/>
-                <!-- Хз что это за хрень -->
-                <f:ajax execute="@form" render="y-error"/>
-            </h:inputText>
-        </p>
-        <p>
-            R:
-            <p:commandLink id="r1" styleClass="link-selected" value="1" onclick="return setR(1)"/>
-            <p:commandLink id="r2" styleClass="link" value="2" onclick="return setR(2)"/>
-            <p:commandLink id="r3" styleClass="link" value="3" onclick="return setR(3)"/>
-            <p:commandLink id="r4" styleClass="link" value="4" onclick="return setR(4)"/>
-            <p:commandLink id="r5" styleClass="link" value="5" onclick="return setR(5)"/>
-        </p>
-
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-
-        <h:panelGrid title="JSF panelGrid Title" border="10" columns="2">
-
-            <h:outputLabel value="JSF standart label"/>
-            <h:button value="JSF default button" title="JSF button Title" outcome="nextPage"/>
-
-        </h:panelGrid>
-
-        <br/>
-
-        r:
-        <h:inputHidden id="r_hidden" value="#{indexBean.r}" required="true"
-                       requiredMessage="Выберите R"/>
-
-
         <!-- В эту форму будет записываться значение -->
         Это спрятано V
         <h:form id="main-form" style="/*display: none*/">
+
+            <p>
+                X:
+                <!-- Первая типо выбрана сейчас -->
+                <h:commandButton styleClass="button-selected" id="x-5" value="-5" onclick="return setX(-5)"/>
+                <c:forEach var="i" begin="0" end="7" step="1">
+                    <h:commandButton
+                            styleClass="button"
+                            id="x#{-4 + i}"
+                            value="#{-4 + i}"
+                            onclick="return setX(#{-4 + i})"/>
+                </c:forEach>
+            </p>
+
+
+            <p>
+                Y:
+                <h:inputText value="10"
+                             converterMessage="Y must be number..."
+                             validatorMessage="Y must be number between -5 and 5 inclusive"
+                             required="true" requiredMessage="Y is required" maxlength="6">
+                    <f:validateDoubleRange minimum="-3" maximum="3"/>
+                    <!-- Хз что это за хрень -->
+                    <f:ajax execute="@form" render="y-error"/>
+                </h:inputText>
+            </p>
+
+            <p>
+                R:
+                <p:commandLink id="r1" styleClass="link-selected" value="1" onclick="return setR(1)"/>
+                <c:forEach var="i" begin="2" end="5" step="1">
+                    <p:commandLink id="r#{i}" styleClass="link" value="#{i}" onclick="return setR(#{i})"/>
+                </c:forEach>
+            </p>
+            <h:inputHidden id="r-hidden" value="#{indexBean.r}" required="true"
+                           requiredMessage="Выберите R"/>
+
+
             <h:inputText id="x" value="#{indexBean.x}"/>
             <h:inputText id="y" value="#{indexBean.y}"/>
             <h:inputText id="r" value="#{indexBean.r}"/>
             <h:commandButton
                     id="submit-button"
-                    type="submit"
                     styleClass="hidden-submit-btn"
-                    action="#{indexBean.submitCoordinates}"/>
+                    action="#{indexBean.submitCoordinates}"
+                    value="поставить точку"
+                    update="@main-form result-table"/>
         </h:form>
 
         <!-- Hidden storage (спрятанное хранилище) -->
@@ -100,7 +84,7 @@
                         <td class="table-y-value">#{point.y}</td>
                         <td class="table-r-value">#{point.r}</td>
                         <td>point.currentTime</td>
-                        <td class="table-hit-value">#{(point.hit ? "Да" : "Нет")}</td>
+                        <td class="table-hit-value">#{(point.hit ? '✅' : '❌')}</td>
                     </tr>
                 </ui:repeat>
             </table>
