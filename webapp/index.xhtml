@@ -18,21 +18,20 @@
     <h:body>
         <!-- В эту форму будет записываться значение -->
         Это спрятано V
+        <p>
+            X:
+            <!-- Первая типо выбрана сейчас -->
+            <h:commandButton styleClass="button-selected" id="x-5" value="-5" onclick="return setX(-5)"/>
+            <c:forEach var="i" begin="0" end="7" step="1">
+                <h:commandButton
+                        styleClass="button"
+                        id="x#{-4 + i}"
+                        value="#{-4 + i}"
+                        onclick="return setX(#{-4 + i})"/>
+            </c:forEach>
+        </p>
+
         <h:form id="main-form" style="/*display: none*/">
-
-            <p>
-                X:
-                <!-- Первая типо выбрана сейчас -->
-                <h:commandButton styleClass="button-selected" id="x-5" value="-5" onclick="return setX(-5)"/>
-                <c:forEach var="i" begin="0" end="7" step="1">
-                    <h:commandButton
-                            styleClass="button"
-                            id="x#{-4 + i}"
-                            value="#{-4 + i}"
-                            onclick="return setX(#{-4 + i})"/>
-                </c:forEach>
-            </p>
-
 
             <p>
                 Y:
@@ -42,35 +41,44 @@
                              required="true" requiredMessage="Y is required" maxlength="6">
                     <f:validateDoubleRange minimum="-3" maximum="3"/>
                     <!-- Хз что это за хрень -->
-                    <f:ajax execute="@form" render="y-error"/>
+                    <f:ajax execute="@main-form" render="y-error"/>
                 </h:inputText>
             </p>
 
-            <p>
-                R:
-                <p:commandLink id="r1" styleClass="link-selected" value="1" onclick="return setR(1)"/>
-                <c:forEach var="i" begin="2" end="5" step="1">
-                    <p:commandLink id="r#{i}" styleClass="link" value="#{i}" onclick="return setR(#{i})"/>
-                </c:forEach>
-            </p>
             <h:inputHidden id="r-hidden" value="#{indexBean.r}" required="true"
                            requiredMessage="Выберите R"/>
 
-
+            x:
             <h:inputText id="x" value="#{indexBean.x}"/>
+            y:
             <h:inputText id="y" value="#{indexBean.y}"/>
+            r:
             <h:inputText id="r" value="#{indexBean.r}"/>
             <h:commandButton
                     id="submit-button"
                     styleClass="hidden-submit-btn"
                     action="#{indexBean.submitCoordinates}"
                     value="поставить точку"
-                    update="@main-form result-table"/>
+                    onclick="invokeRedrawPoints()"
+                    update="results area"
+                    ajax="true"
+                    >
+                <f:ajax execute="x y r" render="results area"/>
+            </h:commandButton>
         </h:form>
 
+        <p>
+            R:
+            <p:commandLink id="r1" styleClass="link-selected" value="1" onclick="return setR(1)"/>
+            <c:forEach var="i" begin="2" end="5" step="1">
+                <p:commandLink id="r#{i}" styleClass="link" value="#{i}" onclick="return setR(#{i})"/>
+            </c:forEach>
+        </p>
+
         <!-- Hidden storage (спрятанное хранилище) -->
+        <!--
         <div>
-            <table id="result-table">
+            <table id="123456">
                 <tr class="table-header">
                     <th class="coords-col">X</th>
                     <th class="coords-col">Y</th>
@@ -89,6 +97,39 @@
                 </ui:repeat>
             </table>
         </div>
+        -->
+
+        <h:dataTable id="results" value="#{indexBean.points}" var="result">
+            <h:column>
+                <f:facet name="header">X</f:facet>
+                <h:outputText styleClass="table-x-value" value='${result.x}'/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Y</f:facet>
+                <h:outputText styleClass="table-y-value" value='${result.y}'/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">R</f:facet>
+                <h:outputText styleClass="table-r-value" value='${result.r}'/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Result</f:facet>
+                <h:outputText styleClass="table-hit-value" value='${result.hit ? "✅" : "❌"}'/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Query Time</f:facet>
+                отс.
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Runtime</f:facet>
+                отс.
+            </h:column>
+        </h:dataTable>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" type="text/javascript"></script>
         <script src="https://d3js.org/d3.v7.min.js" type="text/javascript"></script>

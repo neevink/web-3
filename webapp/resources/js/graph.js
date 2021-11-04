@@ -108,13 +108,13 @@ $(document).ready(function () {
             console.log(r);
             let pos = getMousePosition(event);
             let xVal = Math.round((pos.x - W2) / (2*R) * r.value * 100) / 100;
-            let yVal = Math.round((pos.y - H2) / (2*R) * r.value * 100) / 100;
+            let yVal = Math.round((H2 - pos.y) / (2*R) * r.value * 100) / 100;
             console.log(pos);
             console.log(xVal);
             console.log(yVal);
 
-            document.getElementById('main-form:x').value = yVal;
-            document.getElementById('main-form:y').value = xVal;
+            document.getElementById('main-form:x').value = xVal;
+            document.getElementById('main-form:y').value = yVal;
 
             let btn = document.getElementById('main-form:submit-button');
             btn.click();
@@ -139,18 +139,32 @@ function getCircleSvg(x, y, r, isHit) {
     let graphX = H2 + x / r * 2*R;
     let graphY = W2 - y / r * 2*R;
     let col = isHit ? GREEN : RED;
-    return `<circle r="5" cx="${graphX}" cy="${graphY}" fill-opacity="1" fill="${col}"></circle>`
+    return `<circle r="4" cx="${graphX}" cy="${graphY}" fill-opacity="1" fill="${col}"></circle>`
+}
+
+function invokeRedrawPoints(){
+    setTimeout(
+        redrawPoints,
+        50
+    );
+    setTimeout(
+        redrawPoints,
+        100
+    );
+    setTimeout(
+        redrawPoints,
+        300
+    );
 }
 
 function redrawPoints() {
     clearPoints();
-    // console.log("REDRAW");
+    console.log("REDRAW");
     const xTableValues = document.getElementsByClassName('table-x-value');
     const yTableValues = document.getElementsByClassName('table-y-value');
     const rTableValues = document.getElementsByClassName('table-r-value');
     const hitTableValues = document.getElementsByClassName('table-hit-value');
     const rHidden = document.getElementById('main-form:r-hidden');
-
 
     for (let i = 0; i < xTableValues.length; i++) {
         let x = parseFloat(xTableValues[i].innerText),

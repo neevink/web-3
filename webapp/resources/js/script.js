@@ -3,8 +3,8 @@ const minY = -3, maxY = 3;
 const minR = 1, maxR = 5;
 var x = 0, y = 0, r = 0
 
-document.getElementById('main-form:x').value = minX;
-document.getElementById('main-form:r').value = minR;
+//document.getElementById('main-form:x').value = minX;
+//document.getElementById('main-form:r').value = minR;
 /*
 $(document).ready(function () {
     while (graph === null){
@@ -23,12 +23,12 @@ function setX(newX){
     document.getElementById('main-form:x').value = newX;
 
     for(let i = minX; i <= maxX; i++){
-        let btn = document.getElementById('main-form:x' + i)
+        let btn = document.getElementById('x' + i)
         btn.classList.remove('button-selected');
         btn.classList.add('button');
     }
 
-    let btn = document.getElementById('main-form:x' + newX)
+    let btn = document.getElementById('x' + newX)
     btn.classList.remove('button');
     btn.classList.add('button-selected');
 }
@@ -37,12 +37,12 @@ function setR(newR){
     document.getElementById('main-form:r').value = newR;
 
     for(let i = minR; i <= maxR; i++){
-        let btn = document.getElementById('main-form:r' + i);
+        let btn = document.getElementById('r' + i);
         btn.classList.remove('link-selected');
         btn.classList.add('link');
     }
 
-    let btn = document.getElementById('main-form:r' + newR);
+    let btn = document.getElementById('r' + newR);
     btn.classList.remove('link');
     btn.classList.add('link-selected');
 }
@@ -109,7 +109,7 @@ function validateForm(){
 }
 
 function handleSendButtonClick(event){
-    if(validateForm()){
+    if(/*validateForm()*/ true){
         addPoint(x, y, r);
     }
 }
