@@ -45,7 +45,7 @@ table.wrapper{
     width: 150px;
 }
 
-#main-form, .center-wrapper{
+.center-wrapper{
     width: 100%;
     text-align: center;
 }

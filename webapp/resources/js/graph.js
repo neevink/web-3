@@ -102,16 +102,16 @@ $(document).ready(function () {
     redrawPoints();
 
     graphElem.addEventListener('click', (event) => {
-        const r = document.getElementById('main-form:r-hidden');
-        console.log(r === null);
+        const r = document.getElementById('main-form:r');
+        //console.log(r === null);
         if (r != null) {
             console.log(r);
             let pos = getMousePosition(event);
             let xVal = Math.round((pos.x - W2) / (2*R) * r.value * 100) / 100;
             let yVal = Math.round((H2 - pos.y) / (2*R) * r.value * 100) / 100;
-            console.log(pos);
-            console.log(xVal);
-            console.log(yVal);
+            //console.log(pos);
+            //console.log(xVal);
+            //console.log(yVal);
 
             document.getElementById('main-form:x').value = xVal;
             document.getElementById('main-form:y').value = yVal;
@@ -136,8 +136,10 @@ function addPoint(x, y, r, isHit) {
 }
 
 function getCircleSvg(x, y, r, isHit) {
-    let graphX = H2 + x / r * 2*R;
-    let graphY = W2 - y / r * 2*R;
+    console.log('Исх: ', x, y, r);
+    let graphX = H2 + x/r * 2*R;
+    let graphY = W2 - y/r * 2*R;
+    console.log('Преобр: ', graphX, graphY);
     let col = isHit ? GREEN : RED;
     return `<circle r="4" cx="${graphX}" cy="${graphY}" fill-opacity="1" fill="${col}"></circle>`
 }
@@ -164,14 +166,17 @@ function redrawPoints() {
     const yTableValues = document.getElementsByClassName('table-y-value');
     const rTableValues = document.getElementsByClassName('table-r-value');
     const hitTableValues = document.getElementsByClassName('table-hit-value');
-    const rHidden = document.getElementById('main-form:r-hidden');
+    const rHidden = document.getElementById('main-form:r');
+
+    //console.log('Размер точек: ' + xTableValues.length);
 
     for (let i = 0; i < xTableValues.length; i++) {
         let x = parseFloat(xTableValues[i].innerText),
             y = parseFloat(yTableValues[i].innerText),
             r = parseFloat(rTableValues[i].innerText),
-            hit = hitTableValues[i].innerText === '✅';
-        addPoint(x, y, r, hit);
+            hit = hitTableValues[i].innerText === '✅',
+            rCurr = parseFloat(rHidden.innerText);
+        addPoint(x, y, r, hit, rCurr);
     }
 }
 
