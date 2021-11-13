@@ -50,6 +50,13 @@ table.wrapper{
     text-align: center;
 }
 
+.table-wrapper{
+    overflow:auto;
+    height:300px;
+
+    background: azure;
+}
+
 .center-wrapper{
     width: 100%;
     text-align: center;

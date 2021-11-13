@@ -1,0 +1,9 @@
+CREATE TABLE HitResults(
+    Id SERIAL,
+    X REAL NOT NULL,
+    Y REAL NOT NULL,
+    R REAL NOT NULL,
+    Hit BOOLEAN NOT NULL,
+    CreationTime TIME NOT NULL,
+    QueryTime INT NOT NULL
+);

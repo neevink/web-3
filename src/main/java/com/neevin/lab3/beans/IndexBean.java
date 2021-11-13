@@ -2,11 +2,15 @@ package com.neevin.lab3.beans;
 
 import com.neevin.lab3.helpers.HitChecker;
 import com.neevin.lab3.models.HitResultModel;
+import com.neevin.lab3.models.HitResultsEntity;
+import com.neevin.lab3.services.HitResultsService;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ManagedBean(name = "indexBean")
@@ -17,13 +21,28 @@ import java.util.List;
 @ApplicationScoped - бин сохраняет данные в контексте всего приложения, все видят одни и те же данные
  */
 public class IndexBean implements Serializable {
+    // Массив для отображения
     private List<HitResultModel> points = new ArrayList<HitResultModel>();
+    // Сервис для отображения
+    HitResultsService hitResultsService = new HitResultsService();
 
     protected float x = -5, y = -3, r = 1;
 
     public IndexBean(){
-        // points.add(new HitResultModel(1, 2, 3, true));
-        // points.add(new HitResultModel(0, 1, 1, false));
+        List<HitResultsEntity> dbEntities = hitResultsService.findAllHitResults();
+        for(HitResultsEntity e : dbEntities){
+            HitResultModel newPoint = new HitResultModel(
+                    e.getX(),
+                    e.getY(),
+                    e.getR(),
+                    e.isHit());
+            points.add(newPoint);
+        }
+        HitResultsEntity res = new HitResultsEntity(-1,-1, -1, false, new Time(0), 100);
+
+        hitResultsService.saveHitResult(res);
+
+        hitResultsService.updateHitResults(res);
     }
 
     public float getX(){
@@ -60,7 +79,13 @@ public class IndexBean implements Serializable {
 
 
     public void submitCoordinates(){
+        Date start = new Date();
         System.out.println(String.format("x=%f, y=%f, r=%f", x, y, r));
+        Time time = new Time((new Date()).getTime());
+        HitResultsEntity res = new HitResultsEntity(x,y, r, HitChecker.checkHit(x, y, r), time, 100);
+        hitResultsService.saveHitResult(res);
+        hitResultsService.updateHitResults(res);
+
         // TODO Валидацию прикрути
         HitResultModel pointEntry = new HitResultModel(x, y, r, HitChecker.checkHit(x, y, r));
         points.add(0, pointEntry);
