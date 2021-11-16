@@ -13,8 +13,10 @@
         <h:outputStylesheet library="css" name="style.css"/>
     </h:head>
 
-
     <h:body>
+        <ui:include src="header.xhtml"/>
+
+        <h:link outcome="directToWelcome">Назад</h:link>
 
         <p id="current-date-time"/>
 
@@ -114,6 +116,8 @@
         <h:outputScript library="js" name="graph.js"/>
         <h:outputScript library="js" name="script.js" />
         <h:outputScript library="js" name="clock.js" />
+
+        <h:outputScript library="js" name="logging.js"/>
     </h:body>
 </f:view>
 

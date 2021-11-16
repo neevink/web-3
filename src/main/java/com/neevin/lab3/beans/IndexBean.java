@@ -5,8 +5,8 @@ import com.neevin.lab3.models.HitResultModel;
 import com.neevin.lab3.models.HitResultsEntity;
 import com.neevin.lab3.services.HitResultsService;
 
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 @ManagedBean(name = "indexBean")
-@ApplicationScoped
+@SessionScoped
 /*
 @RequestScoped - бин используется на уравне одного запроса
 @SessionScoped - бин сохраняется между запросами
@@ -29,7 +29,18 @@ public class IndexBean implements Serializable {
     protected float x = -5, y = -3, r = 1;
 
     public IndexBean(){
-        List<HitResultsEntity> dbEntities = hitResultsService.findAllHitResults();
+
+        List<HitResultsEntity> dbEntities = null;
+        try{
+            dbEntities = hitResultsService.findAllHitResults();
+        }
+        catch (Exception exc){}
+        if(dbEntities == null){
+            // Если к бд нет подключения, то ничего не отрисовываем
+            System.out.println("Ошибка подключения к БД!");
+            return;
+        }
+        
         for(HitResultsEntity e : dbEntities){
             HitResultModel newPoint = new HitResultModel(
                     e.getX(),
