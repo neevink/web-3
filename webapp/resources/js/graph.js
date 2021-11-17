@@ -106,7 +106,7 @@ $(document).ready(function () {
         const r = document.getElementById('main-form:r');
         //console.log(r === null);
         if (r != null) {
-            console.log(r);
+            //console.log(r);
             let pos = getMousePosition(event);
             let xVal = Math.round((pos.x - W2) / (2*R) * r.value * 100) / 100;
             let yVal = Math.round((H2 - pos.y) / (2*R) * r.value * 100) / 100;
@@ -131,33 +131,17 @@ function getMousePosition(event) {
     };
 }
 
-
 function addPoint(x, y, r, isHit) {
     graphElem.insertAdjacentHTML('beforeend', getCircleSvg(x, y, r, isHit));
 }
 
 function getCircleSvg(x, y, r, isHit) {
-    console.log('Исх: ', x, y, r);
+    //console.log('Исх: ', x, y, r);
     let graphX = H2 + x/r * 2*R;
     let graphY = W2 - y/r * 2*R;
-    console.log('Преобр: ', graphX, graphY);
+    //console.log('Преобр: ', graphX, graphY);
     let col = isHit ? GREEN : RED;
     return `<circle r="4" cx="${graphX}" cy="${graphY}" fill-opacity="1" fill="${col}"></circle>`
-}
-
-function invokeRedrawPoints(){
-    setTimeout(
-        redrawPoints,
-        50
-    );
-    setTimeout(
-        redrawPoints,
-        100
-    );
-    setTimeout(
-        redrawPoints,
-        300
-    );
 }
 
 function redrawGraph() {
@@ -169,10 +153,6 @@ function redrawGraph() {
             [265, TEXT_Y, newR], [200, TEXT_Y, newR2], [75, TEXT_Y, '-' + newR2], [20, TEXT_Y, '-' + newR],
             [TEXT_X, 35, newR], [TEXT_X, 95, newR2], [TEXT_X, 215, '-' + newR2], [TEXT_X, 275, '-' + newR],
         ];
-        /*
-            [265, TEXT_Y, 'R'], [200, TEXT_Y, 'R/2'], [75, TEXT_Y, '-R/2'], [20, TEXT_Y, '-R'],
-            [TEXT_X, 35, 'R'], [TEXT_X, 95, 'R/2'], [TEXT_X, 215, '-R/2'], [TEXT_X, 275, '-R']
-        */
 
         document.querySelectorAll('text').forEach((node, i) => {
             node.innerHTML = _texts[i][2];
@@ -204,3 +184,9 @@ function redrawPoints() {
 function clearPoints() {
     [...document.querySelectorAll('circle')].map(n => n && n.remove());
 }
+
+// Обновление графика 2 раза в секунду
+setInterval(
+    redrawPoints,
+    250
+);

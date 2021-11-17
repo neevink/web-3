@@ -73,7 +73,7 @@
                         id="submit-button"
                         action="#{indexBean.submitCoordinates}"
                         value="поставить точку"
-                        onclick="invokeRedrawPoints()"
+                        onclick="clickedSendForm()"
                         update="results area"
                         ajax="true">
                     <f:ajax execute="x y r" render="results area"/>

@@ -1,7 +1,7 @@
 const minX = -5, maxX = 3;
 const minY = -3, maxY = 3;
 const minR = 1, maxR = 5;
-var x = 0, y = 0, r = 0
+var x = -5, y = 0, r = 1;
 
 //document.getElementById('main-form:x').value = minX;
 //document.getElementById('main-form:r').value = minR;
@@ -114,4 +114,14 @@ function handleSendButtonClick(event){
     if(/*validateForm()*/ true){
         addPoint(x, y, r);
     }
+}
+
+function clickedSendForm(){
+    console.log('clicked send form!');
+    console.log(`${x} ${y} ${r}`)
+/*
+    document.getElementById('main-form:x').value = x;
+    document.getElementById('main-form:y').value = y;
+    document.getElementById('main-form:r').value = r;
+ */
 }
