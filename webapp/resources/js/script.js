@@ -45,6 +45,8 @@ function setR(newR){
     let btn = document.getElementById('r' + newR);
     btn.classList.remove('link');
     btn.classList.add('link-selected');
+
+    redrawGraph();
 }
 
 function isNumeric(val) {

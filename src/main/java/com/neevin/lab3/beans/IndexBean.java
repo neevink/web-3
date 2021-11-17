@@ -1,6 +1,7 @@
 package com.neevin.lab3.beans;
 
 import com.neevin.lab3.helpers.HitChecker;
+import com.neevin.lab3.helpers.HitValidator;
 import com.neevin.lab3.models.HitResultModel;
 import com.neevin.lab3.models.HitResultsEntity;
 import com.neevin.lab3.services.HitResultsService;
@@ -41,7 +42,8 @@ public class IndexBean implements Serializable {
             return;
         }
         
-        for(HitResultsEntity e : dbEntities){
+        for(int i = dbEntities.size() - 1; i >= 0; i--){
+            HitResultsEntity e = dbEntities.get(i);
             String date = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(e.getCreationTime());
             HitResultModel newPoint = new HitResultModel(
                     e.getX(),
@@ -88,6 +90,10 @@ public class IndexBean implements Serializable {
     }
 
     public void submitCoordinates(){
+        // TODO Валидацию прикрути
+        if(!(HitValidator.validateR(r) && HitValidator.validateX(x) && HitValidator.validateY(y))){
+            return;
+        }
         Date start = new Date();
         System.out.println(String.format("x=%f, y=%f, r=%f", x, y, r));
 
@@ -96,12 +102,10 @@ public class IndexBean implements Serializable {
         hitResultsService.saveHitResult(res);
         hitResultsService.updateHitResults(res);
 
-        int qTime = (int)(new Date().getTime() - start.getTime() + 1);
+        int qTime = (int)(new Date().getTime() - start.getTime());
         res.setQueryTime(qTime);
-        hitResultsService.saveHitResult(res); // Мы короче после первого запроса обновляем инфу по этому запросу
-        hitResultsService.updateHitResults(res);
+        hitResultsService.updateHitResults(res); // Мы короче после первого запроса обновляем инфу по этому запросу
 
-        // TODO Валидацию прикрути
         String date = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(start);
         HitResultModel pointEntry = new HitResultModel(x, y, r, HitChecker.checkHit(x, y, r), date, qTime);
         points.add(0, pointEntry);

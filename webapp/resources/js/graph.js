@@ -100,6 +100,7 @@ $(document).ready(function () {
     });
 
     redrawPoints();
+    redrawGraph();
 
     graphElem.addEventListener('click', (event) => {
         const r = document.getElementById('main-form:r');
@@ -157,6 +158,26 @@ function invokeRedrawPoints(){
         redrawPoints,
         300
     );
+}
+
+function redrawGraph() {
+    let rVal = document.getElementById('main-form:r').value;
+    if (rVal) {
+        let newR = (rVal).toString();
+        let newR2 = (rVal / 2).toString();
+        let _texts = [
+            [265, TEXT_Y, newR], [200, TEXT_Y, newR2], [75, TEXT_Y, '-' + newR2], [20, TEXT_Y, '-' + newR],
+            [TEXT_X, 35, newR], [TEXT_X, 95, newR2], [TEXT_X, 215, '-' + newR2], [TEXT_X, 275, '-' + newR],
+        ];
+        /*
+            [265, TEXT_Y, 'R'], [200, TEXT_Y, 'R/2'], [75, TEXT_Y, '-R/2'], [20, TEXT_Y, '-R'],
+            [TEXT_X, 35, 'R'], [TEXT_X, 95, 'R/2'], [TEXT_X, 215, '-R/2'], [TEXT_X, 275, '-R']
+        */
+
+        document.querySelectorAll('text').forEach((node, i) => {
+            node.innerHTML = _texts[i][2];
+        })
+    }
 }
 
 function redrawPoints() {

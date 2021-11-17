@@ -5,11 +5,12 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://java.sun.com/jsp/jstl/core"
-      xmlns:p="http://primefaces.org/ui" xmlns:H="http://java.sun.com/jsf/html">
-
+      xmlns:p="http://primefaces.org/ui" xmlns:H="http://java.sun.com/jsf/html"
+    lang="en">
 <f:view>
     <h:head>
         <title>Главная</title>
+
         <h:outputStylesheet library="css" name="style.css"/>
     </h:head>
 
@@ -54,15 +55,16 @@
                     <h:inputText
                             id="y"
                             value="#{indexBean.y}"
-                            converterMessage="Y must be number..."
-                            validatorMessage="Y must be number between -5 and 5 inclusive"
+                            converterMessage="Y должен быть числом"
+                            validatorMessage="Y должен быть в диапазоне [-3; 3]"
                             required="true"
-                            requiredMessage="Y is required"
-                            maxlength="6">
+                            requiredMessage="Y обязательно"
+                            maxlength="8">
                         <f:validateDoubleRange minimum="-3" maximum="3"/>
-                        <!-- Хз что это за хрень -->
                         <f:ajax execute="@main-form" render="y-error"/>
                     </h:inputText>
+                    <br/>
+                    <h:message id="y-error" for="y" style="color: #ff6e40; font-size: 16px;"/>
                 </p>
 
                 <h:inputHidden id="x" value="#{indexBean.x}"/>
@@ -83,17 +85,17 @@
             <h:dataTable id="results" value="#{indexBean.points}" var="result">
                 <h:column>
                     <f:facet name="header">X</f:facet>
-                    <h:outputText styleClass="table-x-value" value=' ${result.x} '/>
+                    <h:outputText styleClass="table-x-value" value='${result.x}'/>
                 </h:column>
 
                 <h:column>
                     <f:facet name="header">Y</f:facet>
-                    <h:outputText styleClass="table-y-value" value=' ${result.y} '/>
+                    <h:outputText styleClass="table-y-value" value='${result.y}'/>
                 </h:column>
 
                 <h:column>
                     <f:facet name="header">R</f:facet>
-                    <h:outputText styleClass="table-r-value" value=' ${result.r} '/>
+                    <h:outputText styleClass="table-r-value" value='${result.r}'/>
                 </h:column>
 
                 <h:column>

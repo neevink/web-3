@@ -2,6 +2,7 @@ body{
     background-color: #f5f0e1;
     color: #1e3d59;
     font-size: 18px;
+    font-family: sans-serif;
 }
 
 #header{
@@ -103,12 +104,16 @@ p#info-pannel{
     justify-content: center;
 }
 
+#results td{
+    min-width: 60px;
+}
+
 .button{
     background-color: #1e3d59;
 }
 
 .button-selected{
-    background-color: chartreuse;
+    background-color: #ff6e40;
 }
 
 .link{
@@ -116,7 +121,7 @@ p#info-pannel{
 }
 
 .link-selected{
-    color: chartreuse;
+    color: #ff6e40;
 }
 
 @media handheld, (max-width: 1200px) {
