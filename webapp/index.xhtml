@@ -20,8 +20,11 @@
 
         <p id="current-date-time"/>
 
-        <svg id="area" width="300px" height="300px" xmlns="http://www.w3.org/2000/svg" version="1.1"/>
-
+        <div>
+            <div class="area-wrapper">
+                <svg id="area" class="area" width="300px" height="300px" xmlns="http://www.w3.org/2000/svg" version="1.1"/>
+            </div>
+        </div>
         <!-- В эту форму будет записываться значение -->
         <div class="center-wrapper">
             <p>
@@ -66,7 +69,6 @@
                 <h:inputHidden id="r" value="#{indexBean.r}"/>
                 <h:commandButton
                         id="submit-button"
-                        styleClass="hidden-submit-btn"
                         action="#{indexBean.submitCoordinates}"
                         value="поставить точку"
                         onclick="invokeRedrawPoints()"
@@ -81,32 +83,32 @@
             <h:dataTable id="results" value="#{indexBean.points}" var="result">
                 <h:column>
                     <f:facet name="header">X</f:facet>
-                    <h:outputText styleClass="table-x-value" value='${result.x}'/>
+                    <h:outputText styleClass="table-x-value" value=' ${result.x} '/>
                 </h:column>
 
                 <h:column>
                     <f:facet name="header">Y</f:facet>
-                    <h:outputText styleClass="table-y-value" value='${result.y}'/>
+                    <h:outputText styleClass="table-y-value" value=' ${result.y} '/>
                 </h:column>
 
                 <h:column>
                     <f:facet name="header">R</f:facet>
-                    <h:outputText styleClass="table-r-value" value='${result.r}'/>
+                    <h:outputText styleClass="table-r-value" value=' ${result.r} '/>
                 </h:column>
 
                 <h:column>
-                    <f:facet name="header">Result</f:facet>
+                    <f:facet name="header">Попадание</f:facet>
                     <h:outputText styleClass="table-hit-value" value='${result.hit ? "✅" : "❌"}'/>
                 </h:column>
 
                 <h:column>
-                    <f:facet name="header">Query Time</f:facet>
-                    отс.
+                    <f:facet name="header">Время создания запроса</f:facet>
+                    <h:outputText styleClass="table-query-creation-time" value='${result.creationTime}'/>
                 </h:column>
 
                 <h:column>
-                    <f:facet name="header">Runtime</f:facet>
-                    отс.
+                    <f:facet name="header">Время выполнения</f:facet>
+                    <h:outputText styleClass="table-query-time" value='${result.queryTime}'/> мс.
                 </h:column>
             </h:dataTable>
         </div>
@@ -114,10 +116,14 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" type="text/javascript"></script>
         <script src="https://d3js.org/d3.v7.min.js" type="text/javascript"></script>
         <h:outputScript library="js" name="graph.js"/>
+
         <h:outputScript library="js" name="script.js" />
+
         <h:outputScript library="js" name="clock.js" />
 
+        <!--
         <h:outputScript library="js" name="logging.js"/>
+        -->
     </h:body>
 </f:view>
 

@@ -4,6 +4,6 @@ CREATE TABLE HitResults(
     Y REAL NOT NULL,
     R REAL NOT NULL,
     Hit BOOLEAN NOT NULL,
-    CreationTime TIME NOT NULL,
+    CreationTime TIMESTAMP NOT NULL,
     QueryTime INT NOT NULL
 );

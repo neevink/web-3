@@ -9,6 +9,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,7 +30,6 @@ public class IndexBean implements Serializable {
     protected float x = -5, y = -3, r = 1;
 
     public IndexBean(){
-
         List<HitResultsEntity> dbEntities = null;
         try{
             dbEntities = hitResultsService.findAllHitResults();
@@ -42,18 +42,17 @@ public class IndexBean implements Serializable {
         }
         
         for(HitResultsEntity e : dbEntities){
+            String date = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(e.getCreationTime());
             HitResultModel newPoint = new HitResultModel(
                     e.getX(),
                     e.getY(),
                     e.getR(),
-                    e.isHit());
+                    e.isHit(),
+                    date,
+                    e.getQueryTime()
+                    );
             points.add(newPoint);
         }
-        HitResultsEntity res = new HitResultsEntity(-1,-1, -1, false, new Time(0), 100);
-
-        hitResultsService.saveHitResult(res);
-
-        hitResultsService.updateHitResults(res);
     }
 
     public float getX(){
@@ -88,17 +87,23 @@ public class IndexBean implements Serializable {
         this.points = points;
     }
 
-
     public void submitCoordinates(){
         Date start = new Date();
         System.out.println(String.format("x=%f, y=%f, r=%f", x, y, r));
-        Time time = new Time((new Date()).getTime());
-        HitResultsEntity res = new HitResultsEntity(x,y, r, HitChecker.checkHit(x, y, r), time, 100);
+
+        HitResultsEntity res = new HitResultsEntity(x,y, r, HitChecker.checkHit(x, y, r), start, 0);
+
         hitResultsService.saveHitResult(res);
         hitResultsService.updateHitResults(res);
 
+        int qTime = (int)(new Date().getTime() - start.getTime() + 1);
+        res.setQueryTime(qTime);
+        hitResultsService.saveHitResult(res); // Мы короче после первого запроса обновляем инфу по этому запросу
+        hitResultsService.updateHitResults(res);
+
         // TODO Валидацию прикрути
-        HitResultModel pointEntry = new HitResultModel(x, y, r, HitChecker.checkHit(x, y, r));
+        String date = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(start);
+        HitResultModel pointEntry = new HitResultModel(x, y, r, HitChecker.checkHit(x, y, r), date, qTime);
         points.add(0, pointEntry);
     }
 }

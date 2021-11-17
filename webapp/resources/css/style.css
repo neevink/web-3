@@ -22,23 +22,10 @@ body{
     text-decoration: underline 5px;
 }
 
-#main-table{
-    margin: auto;
-}
-
-#results-table{
+#results{
     margin: 35px auto;
     width: 50%;
     text-align: center;
-}
-
-#main-table .inner-table{
-    margin-left: 45%;
-
-}
-
-table.wrapper{
-    width: 100%;
 }
 
 #corgi{
@@ -54,7 +41,11 @@ table.wrapper{
     overflow:auto;
     height:300px;
 
-    background: azure;
+    background: #d3c7a3;
+}
+
+.table-x-value, .table-y-value, .table-r-value{
+    width: 50px;
 }
 
 .center-wrapper{

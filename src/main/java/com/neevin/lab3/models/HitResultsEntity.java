@@ -2,6 +2,7 @@ package com.neevin.lab3.models;
 
 import javax.persistence.*;
 import java.sql.Time;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -16,12 +17,12 @@ public class HitResultsEntity {
     private boolean hit;
 
     @Column(name = "creationtime")
-    private Time creationTime;
+    private Date creationTime;
 
     @Column(name = "querytime")
     private int queryTime;
 
-    public HitResultsEntity(float x, float y, float r, boolean hit, Time creationTime, int queryTime) {
+    public HitResultsEntity(float x, float y, float r, boolean hit, Date creationTime, int queryTime) {
         this.x = x;
         this.y = y;
         this.r = r;
@@ -72,7 +73,7 @@ public class HitResultsEntity {
         this.hit = hit;
     }
 
-    public Time getCreationTime() {
+    public Date getCreationTime() {
         return creationTime;
     }
 
