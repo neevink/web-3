@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@ManagedBean(name = "indexBean")
-@SessionScoped
 public class IndexBean implements Serializable {
     // Массив для отображения
     private List<HitResultModel> points = new ArrayList<HitResultModel>();
