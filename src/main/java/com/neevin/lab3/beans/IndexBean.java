@@ -9,7 +9,6 @@ import com.neevin.lab3.services.HitResultsService;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,11 +16,6 @@ import java.util.List;
 
 @ManagedBean(name = "indexBean")
 @SessionScoped
-/*
-@RequestScoped - бин используется на уравне одного запроса
-@SessionScoped - бин сохраняется между запросами
-@ApplicationScoped - бин сохраняет данные в контексте всего приложения, все видят одни и те же данные
- */
 public class IndexBean implements Serializable {
     // Массив для отображения
     private List<HitResultModel> points = new ArrayList<HitResultModel>();
@@ -90,7 +84,6 @@ public class IndexBean implements Serializable {
     }
 
     public void submitCoordinates(){
-        // TODO Валидацию прикрути
         if(!(HitValidator.validateR(r) && HitValidator.validateX(x) && HitValidator.validateY(y))){
             return;
         }

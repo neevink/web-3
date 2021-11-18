@@ -15,13 +15,13 @@ public class HibernateSessionFactoryUtil {
             try {
                 Configuration configuration = new Configuration().configure();
                 configuration.addAnnotatedClass(HitResultsEntity.class);
-                // configuration.getProperties() - подгрузить
+                // configuration.getProperties() - подгрузить сохранения из hibernate.cfg.xml
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());
 
             }
             catch (Exception e) {
-                System.out.println("Исключение!" + e);
+                System.out.println("Исключение: " + e);
             }
         }
         return sessionFactory;

@@ -44,7 +44,6 @@ let circle = `M${W2},${H2} ${W2 + 2*R},${H2} A${2*R} ${2*R} 0 0 1 ${W2} ${H2 + 2
 $(document).ready(function () {
     graph = d3.select('svg');
     graphElem = document.querySelector('svg');
-    //console.log(graphElem);
 
     // Белый фон
     graph.append('rect')
@@ -104,15 +103,10 @@ $(document).ready(function () {
 
     graphElem.addEventListener('click', (event) => {
         const r = document.getElementById('main-form:r');
-        //console.log(r === null);
         if (r != null) {
-            //console.log(r);
             let pos = getMousePosition(event);
             let xVal = Math.round((pos.x - W2) / (2*R) * r.value * 100) / 100;
             let yVal = Math.round((H2 - pos.y) / (2*R) * r.value * 100) / 100;
-            //console.log(pos);
-            //console.log(xVal);
-            //console.log(yVal);
 
             document.getElementById('main-form:x').value = xVal;
             document.getElementById('main-form:y').value = yVal;
@@ -136,10 +130,8 @@ function addPoint(x, y, r, isHit) {
 }
 
 function getCircleSvg(x, y, r, isHit) {
-    //console.log('Исх: ', x, y, r);
     let graphX = H2 + x/r * 2*R;
     let graphY = W2 - y/r * 2*R;
-    //console.log('Преобр: ', graphX, graphY);
     let col = isHit ? GREEN : RED;
     return `<circle r="4" cx="${graphX}" cy="${graphY}" fill-opacity="1" fill="${col}"></circle>`
 }
@@ -162,7 +154,6 @@ function redrawGraph() {
 
 function redrawPoints() {
     clearPoints();
-    console.log("REDRAW");
     const xTableValues = document.getElementsByClassName('table-x-value');
     const yTableValues = document.getElementsByClassName('table-y-value');
     const rTableValues = document.getElementsByClassName('table-r-value');

@@ -3,21 +3,6 @@ const minY = -3, maxY = 3;
 const minR = 1, maxR = 5;
 var x = -5, y = 0, r = 1;
 
-//document.getElementById('main-form:x').value = minX;
-//document.getElementById('main-form:r').value = minR;
-/*
-$(document).ready(function () {
-    while (graph === null){
-
-    }
-    graph.append('circle')
-        .attr('r', 4)
-        .attr('cx', 150)
-        .attr('cy', 150)
-        .attr('fill', 'red')
-        .attr('stroke', 'red');
-});
- */
 
 function setX(newX){
     document.getElementById('main-form:x').value = newX;
@@ -107,12 +92,6 @@ function validateForm(){
         r = rNum;
         //alert('x = ' + x + ', y = ' + y + ',r = ' + r);
         return true;
-    }
-}
-
-function handleSendButtonClick(event){
-    if(/*validateForm()*/ true){
-        addPoint(x, y, r);
     }
 }
 

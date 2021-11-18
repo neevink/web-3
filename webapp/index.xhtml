@@ -6,7 +6,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:p="http://primefaces.org/ui" xmlns:H="http://java.sun.com/jsf/html"
-    lang="en">
+      lang="en">
 <f:view>
     <h:head>
         <title>Главная</title>
@@ -26,7 +26,7 @@
                 <svg id="area" class="area" width="300px" height="300px" xmlns="http://www.w3.org/2000/svg" version="1.1"/>
             </div>
         </div>
-        <!-- В эту форму будет записываться значение -->
+
         <div class="center-wrapper">
             <p>
                 R:
@@ -118,14 +118,8 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" type="text/javascript"></script>
         <script src="https://d3js.org/d3.v7.min.js" type="text/javascript"></script>
         <h:outputScript library="js" name="graph.js"/>
-
         <h:outputScript library="js" name="script.js" />
-
         <h:outputScript library="js" name="clock.js" />
-
-        <!--
-        <h:outputScript library="js" name="logging.js"/>
-        -->
     </h:body>
 </f:view>
 
